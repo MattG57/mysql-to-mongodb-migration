@@ -4,6 +4,11 @@ import { Sequelize } from 'sequelize';
 import { initialize } from './migration-utilities';
 import { Team, Member } from './schemas/teams.model';
 import { Seat } from './schemas/copilot.seats.model';
+import { Usage } from './schemas/usage.model';
+import { Settings } from './schemas/settings.model';
+import { Survey } from './schemas/survey.model';
+import { Metrics } from './schemas/metrics.model';
+import { TargetValues } from './schemas/target-values.model';
 
 dotenv.config();
 
@@ -23,6 +28,10 @@ async function main() {
     Team.initModel(sequelize);
     Member.initModel(sequelize);
     Seat.initModel(sequelize);
+    Metrics.initModel(sequelize);
+    Usage.initModel(sequelize);
+    Survey.initModel(sequelize);
+    TargetValues.initModel(sequelize);
 
     // Test MySQL connection
     await sequelize.authenticate();
@@ -33,7 +42,11 @@ async function main() {
       models: {
         Team,
         Member,
-        Seat
+        Seat,
+        Metrics,
+        Usage,
+        Survey,
+        TargetValues
       },
       mongodb: {
         uri: process.env.MONGODB_URI || 'mongodb://localhost:27027/your_database'
