@@ -43,7 +43,28 @@ class Usage extends Model<UsageType> {
   declare totalActiveChatUsers: number;
 
   static initModel(sequelize: Sequelize) {
-    // UsageBreakdown.initModel(sequelize);
+    Usage.init({
+      org: DataTypes.STRING,
+      team: DataTypes.STRING,
+      day: {
+        type: DataTypes.DATEONLY,
+        primaryKey: true,
+      },
+      totalSuggestionsCount: DataTypes.INTEGER,
+      totalAcceptancesCount: DataTypes.INTEGER,
+      totalLinesSuggested: DataTypes.INTEGER,
+      totalLinesAccepted: DataTypes.INTEGER,
+      totalActiveUsers: DataTypes.INTEGER,
+      totalChatAcceptances: DataTypes.INTEGER,
+      totalChatTurns: DataTypes.INTEGER,
+      totalActiveChatUsers: DataTypes.INTEGER,
+    }, {
+      sequelize,
+      timestamps: false,
+    });
+
+    Usage.hasMany(UsageBreakdown, { foreignKey: 'usage_day' });
+    UsageBreakdown.belongsTo(Usage, { foreignKey: 'usage_day' });
   }
 }
 
@@ -106,7 +127,6 @@ class UsageBreakdown extends Model<UsageBreakdownType> {
       timestamps: false,
     });
 
-    // Set up associations
     Usage.hasMany(UsageBreakdown, { foreignKey: 'usage_day' });
     UsageBreakdown.belongsTo(Usage, { foreignKey: 'usage_day' });
   }

@@ -492,7 +492,7 @@ class MetricDotcomChatMetrics extends Model<MetricDotcomChatMetricsType> {
         autoIncrement: true
       },
       total_engaged_users: DataTypes.INTEGER,
-      total_chats: DataTypes.INTEGER,
+      total_chats: Data.INTEGER,
       daily_metric_id: DataTypes.DATE
     }, {
       sequelize,
