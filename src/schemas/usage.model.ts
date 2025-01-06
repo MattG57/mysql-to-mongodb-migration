@@ -145,3 +145,4 @@ async function insertUsage(org: string, data: Endpoints["GET /orgs/{org}/copilot
 }
 
 export { Usage, UsageBreakdown, insertUsage };
+

@@ -72,13 +72,17 @@ class MigrationManager {
   }
 
   initializeMongoModels(): void {
+    console.log('Initializing MongoDB models...');
     Object.entries(this.sequelizeModels).forEach(([modelName, model]) => {
+      console.log(`Processing model: ${modelName}`);
       const attributes = model.getAttributes() as ModelAttributes<Model<any, any>>;
+      console.log(`Processing model2: ${modelName}`);
       const schemaDefinition: { [key: string]: any } = {};
+      console.log(`Processing model3: ${modelName}`);
       
       Object.entries(attributes).forEach(([field, attr]) => {
         if (field === 'id') return;
-        
+        console.log(`Processing model4: ${modelName}`);
         const columnOptions = attr as ModelAttributeColumnOptions;
         // Special handling for foreign key fields
         if (field === 'assignee_id' || field === 'assigning_team_id' || field === 'parent_id') {
@@ -112,7 +116,9 @@ class MigrationManager {
       
       // Create new model
       this.mongoModels[modelName] = mongoose.model(modelName, schema);
+      console.log(`Model ${modelName} initialized`);
     });
+    console.log('MongoDB models initialization complete');
   }
 
   private async migrateModel(
@@ -198,36 +204,49 @@ class MigrationManager {
     console.log('Updating team parent relationships...');
     const TeamModel = this.mongoModels['Team'];
     
-    const teams = await TeamModel.find({});
-    for (const team of teams) {
-      const parentId = (team as any).parent_id;
-      if (parentId) {
-        const parentMongoId = this.idMappings.get(`Team-${parentId}`);
-        if (parentMongoId) {
-          (team as any).parent = parentMongoId;
-          await team.save();
+    try {
+      const teams = await TeamModel.find({});
+      for (const team of teams) {
+        const parentId = (team as any).parent_id;
+        if (parentId) {
+          const parentMongoId = this.idMappings.get(`Team-${parentId}`);
+          if (parentMongoId) {
+            (team as any).parent = parentMongoId;
+            await team.save();
+          }
         }
       }
+    } catch (error) {
+      console.error('Error updating team relationships:', error instanceof Error ? error.message : String(error));
+      throw error;
     }
   }
 
-  async migrateAll(batchSize = 1000): Promise<void> {
+  async migrateAll(batchSize = 3000): Promise<void> {
     try {
+      console.log('Starting connection to MongoDB...');
       await this.connect();
+      console.log('Connected to dbs');
+      
+      console.log('Initializing MongoDB models...');
       this.initializeMongoModels();
-
+      console.log('MongoDB models initialized');
+      
+      console.log('Starting migration...');
       for (const [modelName, SequelizeModel] of Object.entries(this.sequelizeModels)) {
         console.log(`Migrating ${modelName}...`);
         await this.migrateModel(modelName, SequelizeModel, batchSize);
       }
 
+      console.log('Updating team relationships...');
       await this.updateTeamRelationships();
+      
+      console.log('Updating other relationships...');
       await this.updateRelationships();
 
       console.log('Migration completed successfully');
     } catch (error) {
       console.error('Migration failed:', error instanceof Error ? error.message : String(error));
-      throw new Error(`Migration failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
@@ -237,7 +256,10 @@ class MigrationManager {
     for (const [modelName, MongoModel] of Object.entries(this.mongoModels)) {
       const foreignKeyFields = this.getForeignKeyFields(MongoModel.schema);
 
-      if (foreignKeyFields.length === 0) continue;
+      if (foreignKeyFields.length === 0) {
+        console.log(`No foreign key fields found for ${modelName}`);
+        continue;
+      }
 
       const documents = await MongoModel.find({});
       

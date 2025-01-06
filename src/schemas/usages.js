@@ -1,9 +1,10 @@
+//usages.js
 const { DataTypes } = require('sequelize');
 const mongoose = require('mongoose');
 
 module.exports = {
   mysql: {
-    tableName: 'Usage',
+    tableName: 'Usages',
     model: require('../models/usage.model.ts').Usage,
     relationships: {
       hasMany: [
@@ -12,7 +13,7 @@ module.exports = {
     }
   },
   mongodb: {
-    collectionName: 'usage',
+    collectionName: 'usages',
     relationships: {
       breakdowns: { ref: 'UsageBreakdown', foreignKey: 'usage_day' }
     }
