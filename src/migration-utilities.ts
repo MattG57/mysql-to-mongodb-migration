@@ -150,7 +150,7 @@ class MigrationManager {
   
       // Track unique IDs to avoid duplicates
       const batchIds = new Set(records.map(r => r.id));
-      console.log(`Batch size: ${records.length}, Unique IDs in batch: ${batchIds.size}`);
+      //console.log(`Batch size: ${records.length}, Unique IDs in batch: ${batchIds.size}`);
   
       const documents = records.map(record => {
         const { id, ...data } = record as { id?: number; [key: string]: any };
@@ -177,8 +177,8 @@ class MigrationManager {
         
         // Log progress with more detail
         const progress = Math.round((offset/sourceCount)*100);
-        console.log(`Migrated batch at offset ${offset}/${sourceCount} (${progress}%)`);
-        console.log(`Total migrated so far: ${totalMigrated}`);
+        //console.log(`Migrated batch at offset ${offset}/${sourceCount} (${progress}%)`);
+       // console.log(`Total migrated so far: ${totalMigrated}`);
         
       } catch (error) {
         console.error(`Error in batch starting at offset ${offset}:`, error);

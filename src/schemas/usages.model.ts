@@ -1,16 +1,23 @@
-//usage.model.ts
+// usage.model.ts
 import { DataTypes, Model, Sequelize } from 'sequelize';
-import mongoose from 'mongoose';
-import { UsageType } from './types';
 import { UsageBreakdown } from './usageBreakdown.model';
 
-
-// ... types remain the same ...
+type UsageType = {
+  day: Date;
+  totalSuggestionsCount: number;
+  totalAcceptancesCount: number;
+  totalLinesSuggested: number;
+  totalLinesAccepted: number;
+  totalActiveUsers: number;
+  totalChatAcceptances: number;
+  totalChatTurns: number;
+  totalActiveChatUsers: number;
+  org: string | null;
+  team: string | null;
+}
 
 class Usages extends Model<UsageType> {
-  declare org: string;
-  declare team: string;
-  declare day: string;
+  declare day: Date;
   declare totalSuggestionsCount: number;
   declare totalAcceptancesCount: number;
   declare totalLinesSuggested: number;
@@ -19,66 +26,60 @@ class Usages extends Model<UsageType> {
   declare totalChatAcceptances: number;
   declare totalChatTurns: number;
   declare totalActiveChatUsers: number;
+  declare org: string | null;
+  declare team: string | null;
 
   static initModel(sequelize: Sequelize) {
     Usages.init({
-      org: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      team: {
-        type: DataTypes.STRING,
-        allowNull: true
-      },
       day: {
-        type: DataTypes.DATEONLY,
+        type: DataTypes.DATE,
         primaryKey: true,
         allowNull: false
       },
       totalSuggestionsCount: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0
+        allowNull: false
       },
       totalAcceptancesCount: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0
+        allowNull: false
       },
       totalLinesSuggested: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0
+        allowNull: false
       },
       totalLinesAccepted: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0
+        allowNull: false
       },
       totalActiveUsers: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0
+        allowNull: false
       },
       totalChatAcceptances: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0
+        allowNull: false
       },
       totalChatTurns: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0
+        allowNull: false
       },
       totalActiveChatUsers: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0
+        allowNull: false
+      },
+      org: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      team: {
+        type: DataTypes.STRING,
+        allowNull: true
       }
     }, {
       sequelize,
       modelName: 'Usage',
-      tableName: 'Usages', // explicitly set table name
+      tableName: 'Usages',
       timestamps: false,
       indexes: [
         {

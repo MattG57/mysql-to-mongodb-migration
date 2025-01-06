@@ -6,7 +6,7 @@ import { Team, Member } from './schemas/teams.model';
 import { Seat } from './schemas/copilot.seats.model';
 import { Settings } from './schemas/settings.model';
 import { Usages } from './schemas/usages.model';
-import { TargetValues } from './schemas/target-values.model';
+//import { TargetValues } from './schemas/target-values.model';
 import { Survey } from './schemas/survey.model';
 
 
@@ -31,7 +31,7 @@ async function main() {
     Team.initModel(sequelize);
     Seat.initModel(sequelize);
     Settings.initModel(sequelize);
-    TargetValues.initModel(sequelize);
+    //TargetValues.initModel(sequelize);
     Survey.initModel(sequelize);
     Usages.initModel(sequelize);
 
@@ -55,7 +55,7 @@ async function main() {
         Team,
         Seat,
         Settings,
-        TargetValues,
+     //   TargetValues,
         Survey,
         Usages
       },

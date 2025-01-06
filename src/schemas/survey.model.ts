@@ -4,15 +4,15 @@ type SurveyType = {
   id?: number;
   org: string;
   repo: string;
-  prNumber: number;
+  prNumber: number | null;
   status: 'pending' | 'completed';
-  hits: number;
-  userId: string;
+  hits: number | null;
+  userId: string | null;
   usedCopilot: boolean;
   percentTimeSaved: number;
   timeUsedFor: string;
-  reason: string;
-  kudos?: number;
+  reason: string | null;
+  //kudos?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -21,15 +21,15 @@ class Survey extends Model<SurveyType> {
   declare id?: number;
   declare org: string;
   declare repo: string;
-  declare prNumber: number;
+  declare prNumber: number | null;
   declare status: 'pending' | 'completed';
-  declare hits: number;
-  declare userId: string;
+  declare hits: number | null;
+  declare userId: string | null;
   declare usedCopilot: boolean;
   declare percentTimeSaved: number;
   declare timeUsedFor: string;
-  declare reason: string;
-  declare kudos: number;
+  declare reason: string | null;
+  //declare kudos: number;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
@@ -83,15 +83,16 @@ class Survey extends Model<SurveyType> {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
-      kudos: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
+      // kudos: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: true
+      // },
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE
     }, {
       sequelize,
       modelName: 'Survey',
+      tableName: 'Surveys', // explicitly set table name
       timestamps: true,
     });
   }
